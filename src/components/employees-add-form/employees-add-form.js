@@ -23,6 +23,7 @@ class EmployeesAddForm extends Component {
       name: this.state.name,
       salary: this.state.salary,
       increase: false,
+      rise: false,
       id: this.maxId,
     };
     this.props.addItem(newEmployee);

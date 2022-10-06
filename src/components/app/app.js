@@ -13,9 +13,9 @@ class App extends Component {
     super(props);
     this.state = {
       data: [
-        { name: "John W.", salary: 800, increase: true, id: 1 },
-        { name: "Luke S.", salary: 3000, increase: false, id: 2 },
-        { name: "Ace V.", salary: 5000, increase: false, id: 3 },
+        { name: "John W.", salary: 800, increase: true, rise: false, id: 1 },
+        { name: "Luke S.", salary: 3000, increase: false, rise: true, id: 2 },
+        { name: "Ace V.", salary: 5000, increase: false, rise: false, id: 3 },
       ],
     };
   }
@@ -43,18 +43,61 @@ class App extends Component {
       });
     }
   };
+ 
+  // onToggleIncrease don't work after refactoring
+  // onToggleIncrease = (id) => {
+  //   // ##### method 1:
+  //   // this.setState(({data}) => {
+  //   //   const index = data.findIndex(elem => elem.id === id);
+
+  //   //   const target = data[index];
+  //   //   const targetChanged = {...target, increase: !target.increase};
+  //   //   const newArr = [...data.slice(0, index),  targetChanged, ...data.slice(index + 1)];
+  //   //   return {
+  //   //     data: newArr
+  //   //   }
+  //   // })
+
+  //   // ##### method 2:
+  //   this.setState(({data}) => ({
+  //     data: data.map((item) => {
+  //       if (item.id === id) {
+  //         return {...item, increase: !item.increase}
+  //       }
+  //       return item;
+  //     })
+  //   }))
+  // };
+
+  onToggleProp = (id, prop) => {
+    this.setState(({data}) => ({
+      data: data.map((item) => {
+        if (item.id === id) {
+          return {...item, [prop]: !item[prop]}
+        }
+        return item;
+      })
+    }))
+  };
 
   render() {
+    const employees = this.state.data.length;
+    const increase = this.state.data.filter(item => item.increase).length;
+
     return (
       <div className="app">
-        <AppInfo />
+        <AppInfo employees={employees} increase={increase}/>
 
         <div className="search-panel">
           <SearchPanel />
           <AppFilter />
         </div>
 
-        <EmployeesList data={this.state.data} onDelete={this.deleteItem} />
+        <EmployeesList
+          data={this.state.data}
+          onDelete={this.deleteItem}
+          onToggleProp={this.onToggleProp}
+        />
         <EmployeesAddForm addItem={this.addItem} />
       </div>
     );
