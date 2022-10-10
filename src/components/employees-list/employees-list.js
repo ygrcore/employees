@@ -16,9 +16,11 @@ const EmployeesList = ({ data, onDelete, onToggleProp }) => {
     );
   });
 
-  return <ul className="app-list list-group">
-    {elements}
-  </ul>;
+  return (
+    <ul className="app-list list-group">
+      {elements}
+    </ul>
+  )
 };
 
 export default EmployeesList;
