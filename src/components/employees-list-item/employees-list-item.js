@@ -1,8 +1,41 @@
+import { Component } from 'react';
 import './employees-list-item.css';
 
-const EmployeesListItem = (props) => {
-        const {name, salary, onDeleteItem, onToggleProp, increase, rise} = props;
+class EmployeesListItem extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            salary: ''
+        }
+    };
+       
+    keyHandler = (e) => {
+        if (e.code === 'Enter' || e.code === 'Space') {
+            this.props.onToggleProp(e)
+        }
+    }
 
+    onFocus = (event) => {
+        const currentElem = event.target;
+        currentElem.addEventListener('keydown', this.keyHandler)
+    }
+
+    onBlur = (event) => {
+        const currentElem = event.target;
+        currentElem.removeEventListener('keydown', this.keyHandler)
+    }
+
+    onInputValueChange = (e) => {
+        const salaryChange = e.target.value;
+
+        this.setState({
+            salary: salaryChange
+        });
+        this.props.changeSalary(salaryChange)
+    }
+
+    render() {
+        const {name, salary, onDeleteItem, onToggleProp, increase, rise} = this.props;
         let classNames = "list-group-item d-flex justify-content-between"
         if (increase) {
             classNames += ' increase';
@@ -10,11 +43,13 @@ const EmployeesListItem = (props) => {
         if (rise) {
             classNames += ' like'
         }
-        
+    
+
+
         return (
             <li className={classNames}>
-                <span className="list-group-item-label" onClick={onToggleProp} data-toggle="rise">{name}</span>
-                <input type="text" className="list-group-item-input" defaultValue={salary + '$'}/>
+                <span className="list-group-item-label" tabIndex={0} onClick={onToggleProp} onFocus={this.onFocus} onBlur={this.onBlur} data-toggle="rise">{name}</span>
+                <input type="text" className="list-group-item-input" onChange={this.onInputValueChange} defaultValue={salary + '$'}/>
                 <div className="d-flex justify-content-center align-items-center">
                     <button type="button" className="btn-cookie btn-sm" onClick={onToggleProp} data-toggle="increase">
                         <i className="fas fa-cookie"></i>
@@ -27,6 +62,8 @@ const EmployeesListItem = (props) => {
                 </div>
             </li>
         )
+    }
+
     
 }
 

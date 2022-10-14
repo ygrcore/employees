@@ -112,6 +112,14 @@ class App extends Component {
     this.setState({filter})
   }
 
+  changeSalary = (salary) => {
+    this.setState(({data}) => ({
+      data: data.map(item => {
+          return {...item, salary}
+      })
+    }))
+  }
+
   render() {
     const {data, term, filter} = this.state;
     const employees = this.state.data.length;
@@ -131,6 +139,7 @@ class App extends Component {
           data={visibleData}
           onDelete={this.deleteItem}
           onToggleProp={this.onToggleProp}
+          changeSalary={this.changeSalary}
         />
         <EmployeesAddForm addItem={this.addItem} />
       </div>
